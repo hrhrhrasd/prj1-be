@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BoardController {
 
 
+
     @PostMapping("/add")
     public void add() {
         System.out.println("BoardController.add");
