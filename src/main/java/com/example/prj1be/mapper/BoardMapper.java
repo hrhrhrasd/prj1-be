@@ -22,4 +22,10 @@ public interface BoardMapper {
         order by id
 """)
     List<Board> getList();
+
+    @Select("""
+        select id, title, content, writer, inserted from board
+        where id = #{id}
+""")
+    Board selectById(Integer id);
 }
