@@ -59,7 +59,7 @@ public class MemberController {
     }
 
     @DeleteMapping
-    private ResponseEntity delete(String id) {
+    public ResponseEntity delete(String id) {
         //TODO : 로그인 했는지?  안했으면 401
         //TODO : 자기 정보인지?  아니면 403
 
@@ -68,4 +68,15 @@ public class MemberController {
         }
         return ResponseEntity.internalServerError().build();
     }
+
+    @PostMapping
+    public ResponseEntity update(@RequestBody String id, @RequestBody String password,
+                                 @RequestBody String email) {
+
+        if (service.updateMember(id, password, email)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.internalServerError().build();
+    }
+
 }
