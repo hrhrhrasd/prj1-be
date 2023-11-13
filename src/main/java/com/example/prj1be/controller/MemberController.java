@@ -37,6 +37,15 @@ public class MemberController {
         }
     }
 
+    @GetMapping(value = "check", params = "nickName")
+    public ResponseEntity checkNickName(String nickName) {
+        if (service.getNickName(nickName) == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+
     @GetMapping(value = "check", params = "email")
     public ResponseEntity checkEmail(String email) {
         if (service.getEmail(email) == null) {

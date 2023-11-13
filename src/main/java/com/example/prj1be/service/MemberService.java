@@ -21,6 +21,10 @@ public class MemberService {
         return mapper.selectId(id);
     }
 
+    public String getNickName(String nickName) {
+        return mapper.selectNickName(nickName);
+    }
+
     public String getEmail(String email) {
         return mapper.selectEmail(email);
 
@@ -28,6 +32,14 @@ public class MemberService {
 
     public boolean validate(Member member) {
         if (member == null) {
+            return false;
+        }
+
+        if (member.getId().isBlank()) {
+            return false;
+        }
+
+        if (member.getNickName().isBlank()) {
             return false;
         }
 
@@ -39,9 +51,6 @@ public class MemberService {
             return false;
         }
 
-        if (member.getId().isBlank()) {
-            return false;
-        }
         return true;
     }
 
