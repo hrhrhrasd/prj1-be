@@ -11,7 +11,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
 
-
     private final BoardMapper mapper;
 
     public boolean save(Board board) {
@@ -19,7 +18,7 @@ public class BoardService {
     }
 
     public boolean validate(Board board) {
-        if (board == null ) {
+        if (board == null) {
             return false;
         }
 
@@ -38,8 +37,8 @@ public class BoardService {
         return true;
     }
 
-    public List<Board> getList() {
-        return mapper.getList();
+    public List<Board> list() {
+        return mapper.selectAll();
     }
 
     public Board get(Integer id) {
@@ -47,6 +46,10 @@ public class BoardService {
     }
 
     public boolean remove(Integer id) {
-        return mapper.deleteById(id) == 1 ;
+        return mapper.deleteById(id) == 1;
+    }
+
+    public boolean update(Board board) {
+        return mapper.update(board) == 1;
     }
 }

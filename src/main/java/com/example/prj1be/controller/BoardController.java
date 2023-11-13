@@ -1,9 +1,8 @@
-package com.example.prj1be.Controller;
+package com.example.prj1be.controller;
 
 import com.example.prj1be.domain.Board;
 import com.example.prj1be.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +13,9 @@ import java.util.List;
 @RequestMapping("/api/board")
 public class BoardController {
 
-
     private final BoardService service;
 
-    @PostMapping("/add")
+    @PostMapping("add")
     public ResponseEntity add(@RequestBody Board board) {
         if (!service.validate(board)) {
             return ResponseEntity.badRequest().build();
@@ -30,12 +28,12 @@ public class BoardController {
         }
     }
 
-    @GetMapping("/list")
+    @GetMapping("list")
     public List<Board> list() {
-        return service.getList();
+        return service.list();
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("id/{id}")
     public Board get(@PathVariable Integer id) {
         return service.get(id);
     }
@@ -46,6 +44,19 @@ public class BoardController {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PutMapping("edit")
+    public ResponseEntity edit(@RequestBody Board board) {
+        if (service.validate(board)) {
+            if (service.update(board)) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.internalServerError().build();
+            }
+        } else {
+            return ResponseEntity.badRequest().build();
         }
     }
 }
