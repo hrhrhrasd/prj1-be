@@ -2,6 +2,7 @@ package com.example.prj1be.controller;
 
 import com.example.prj1be.domain.Member;
 import com.example.prj1be.service.MemberService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpStatus;
@@ -97,6 +98,13 @@ public class MemberController {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @PostMapping("logout")
+    public void logout(HttpSession session) {
+        if (session != null) {
+            session.invalidate();
         }
     }
 }
