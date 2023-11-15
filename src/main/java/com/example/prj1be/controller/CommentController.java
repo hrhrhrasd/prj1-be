@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/comment")
 @RequiredArgsConstructor
@@ -31,8 +33,10 @@ public class CommentController {
         } else {
             return ResponseEntity.badRequest().build();
         }
-
-
     }
 
+    @GetMapping("/list")
+    public List<Comment> list(@RequestParam("id") Integer boardId) {
+        return service.list(boardId);
+    }
 }
