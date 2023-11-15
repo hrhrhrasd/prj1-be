@@ -4,6 +4,7 @@ import com.example.prj1be.domain.Comment;
 import com.example.prj1be.domain.Member;
 import com.example.prj1be.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,5 +39,16 @@ public class CommentController {
     @GetMapping("/list")
     public List<Comment> list(@RequestParam("id") Integer boardId) {
         return service.list(boardId);
+    }
+
+    @DeleteMapping("/delete")
+    public void delete(@RequestParam("id") Integer id) {
+        System.out.println("id = " + id);
+        service.remove(id);
+//        if (service.remove(id)) {
+//            return ResponseEntity.ok().build();
+//        } else {
+//            return ResponseEntity.internalServerError().build();
+//        }
     }
 }
