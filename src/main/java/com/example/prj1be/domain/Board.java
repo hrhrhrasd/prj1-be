@@ -8,6 +8,7 @@ public class Board {
     private String title;
     private String content;
     private String writer;
+    private Integer good;
     private String nickName;
     private String inserted;
 }
