@@ -15,9 +15,12 @@ public interface BoardMapper {
     int insert(Board board);
 
     @Select("""
-        SELECT board.id, title, board.writer, member.nickName, board.inserted
+        SELECT board.id, title, board.writer, member.nickName, board.inserted,
+         (select count(*) from comment
+         where boardId = board.id) commentCount
         FROM board join member
         on board.writer = member.id
+        
         ORDER BY board.id DESC
         """)
     List<Board> selectAll();

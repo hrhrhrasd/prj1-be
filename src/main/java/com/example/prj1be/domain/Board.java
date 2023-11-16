@@ -10,4 +10,5 @@ public class Board {
     private String writer;
     private String nickName;
     private String inserted;
+    private Integer commentCount;
 }

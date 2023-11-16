@@ -15,7 +15,8 @@ public interface CommentMapper {
     int insert(Comment comment);
 
     @Select("""
-       select * from comment
+       select c.id, c.boardId, c.memberId, c.comment, m.nickName, c.inserted from comment c
+       join member m on c.memberId = m.id
        where boardId = #{boardId}
 """)
     List<Comment> selectByBoardId(Integer boardId);
