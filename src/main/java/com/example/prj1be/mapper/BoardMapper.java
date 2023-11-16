@@ -53,4 +53,10 @@ public interface BoardMapper {
         where writer = #{writer}
 """)
     int deleteByWriter(String writer);
+
+    @Select("""
+        select id from  board
+        where writer = #{id}
+""")
+    List<Integer> selectIdListByMemberId(String id);
 }
