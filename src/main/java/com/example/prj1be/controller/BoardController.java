@@ -50,6 +50,8 @@ public class BoardController {
     public ResponseEntity remove(@PathVariable Integer id,
                                  @SessionAttribute(value = "login", required = false) Member login) {
 
+        service.commentRemove(id);
+
         if (login == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();  // 401
         }

@@ -1,6 +1,8 @@
 package com.example.prj1be.controller;
 
 import com.example.prj1be.domain.Member;
+import com.example.prj1be.service.BoardService;
+import com.example.prj1be.service.CommentService;
 import com.example.prj1be.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,8 @@ import java.util.List;
 @RequestMapping("/api/member")
 public class MemberController {
     private final MemberService service;
+    private final BoardService boardService;
+    private final CommentService commentService;
 
     @PostMapping("signup")
     public ResponseEntity signup(@RequestBody Member member) {
@@ -85,6 +89,10 @@ public class MemberController {
                                  @SessionAttribute(value = "login", required = false) Member login) {
         //TODO : 로그인 했는지?  안했으면 401
         //TODO : 자기 정보인지?  아니면 403
+        commentService.deleteByMemberId(id);
+        boardService.deleteByMemberId(id);
+
+
         if (login == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
