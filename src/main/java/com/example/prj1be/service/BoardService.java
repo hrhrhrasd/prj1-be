@@ -4,6 +4,7 @@ import com.example.prj1be.domain.Board;
 import com.example.prj1be.domain.Member;
 import com.example.prj1be.mapper.BoardMapper;
 import com.example.prj1be.mapper.CommentMapper;
+import com.example.prj1be.mapper.LikeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ public class BoardService {
 
     private final BoardMapper mapper;
     private final CommentMapper commentMapper;
+    private final LikeMapper likeMapper;
 
     public boolean save(Board board, Member login) {
         board.setWriter(login.getId());
@@ -41,8 +43,13 @@ public class BoardService {
         return mapper.selectAll();
     }
 
-    public Board get(Integer id) {
-        return mapper.selectById(id);
+    public Board get(Integer id,String memberId) {
+        Board board = mapper.selectById(id);
+        int a = likeMapper.selectByBoardMemberId(id, memberId);
+        board.setLiked(a == 1);
+        board.setCountLike(likeMapper.selectByBoardId(id));
+        System.out.println("board = " + board);
+        return board;
     }
 
     public boolean remove(Integer id) {

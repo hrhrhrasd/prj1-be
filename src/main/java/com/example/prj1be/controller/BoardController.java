@@ -42,8 +42,10 @@ public class BoardController {
     }
 
     @GetMapping("id/{id}")
-    public Board get(@PathVariable Integer id) {
-        return service.get(id);
+    public Board get(@PathVariable Integer id,
+                     @SessionAttribute(value = "login",required = false) Member login) {
+        System.out.println("login = " + login);
+        return service.get(id, login.getId());
     }
 
     @DeleteMapping("remove/{id}")
