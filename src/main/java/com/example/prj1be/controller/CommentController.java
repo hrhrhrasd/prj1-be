@@ -42,7 +42,7 @@ public class CommentController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity remove(@PathVariable Integer id,
-                                         @SessionAttribute(value = "login",required = false)Member login) {
+                                 @SessionAttribute(value = "login", required = false) Member login) {
         if (login == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -56,5 +56,15 @@ public class CommentController {
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity update(@RequestBody Comment comment) {
+        if (service.update(comment)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.internalServerError().build();
+        }
+
     }
 }
