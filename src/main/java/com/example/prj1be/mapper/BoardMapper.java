@@ -61,4 +61,10 @@ public interface BoardMapper {
         where writer = #{id}
 """)
     List<Integer> selectIdListByMemberId(String id);
+
+    @Select("""
+        select count(*) from board
+""")
+    int countAll();
+
 }
