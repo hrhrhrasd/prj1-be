@@ -33,4 +33,16 @@ public interface LikeMapper {
         and memberId = #{memberId}
 """)
     Like selectByBoardIdAndMemberId(Integer boardId, String memberId);
+
+    @Delete("""
+        delete from boardLike
+        where boardId=#{id}
+""")
+    int deleteByBoardId(Integer id);
+
+    @Delete("""
+        delete from boardLike
+        where memberId=#{id}
+""")
+    int deleteByMemberId(String id);
 }
