@@ -23,8 +23,9 @@ public interface BoardMapper {
         left join boardLike l on board.id = l.boardId
         group by board.id
         ORDER BY board.id DESC
+        LIMIT #{from}, 10
         """)
-    List<Board> selectAll();
+    List<Board> selectAll(Integer from);
 
     @Select("""
         SELECT b.id, b.title, b.content, b.writer, m.nickName, b.inserted
