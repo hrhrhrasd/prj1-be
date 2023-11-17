@@ -11,4 +11,5 @@ public class Board {
     private String nickName;
     private String inserted;
     private Integer countComment;
+    private Integer countLike;
 }

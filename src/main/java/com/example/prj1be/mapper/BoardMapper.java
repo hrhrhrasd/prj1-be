@@ -16,10 +16,11 @@ public interface BoardMapper {
 
     @Select("""
         SELECT board.id, title, board.writer, member.nickName, board.inserted,
-        count(c.id) countComment
+        count(distinct c.id) countComment, count(distinct l.id) countLike
         FROM board join member
         on board.writer = member.id
         left join comment c on board.id = c.boardId
+        left join boardLike l on board.id = l.boardId
         group by board.id
         ORDER BY board.id DESC
         """)
