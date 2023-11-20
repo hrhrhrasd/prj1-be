@@ -137,6 +137,8 @@ public class BoardService {
         // 좋아요 레코드 지우기
         likeMapper.deleteByBoardId(id);
 
+        fileMapper.deleteByBoardId(id);
+
         return mapper.deleteById(id) == 1;
     }
 
