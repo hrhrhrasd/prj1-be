@@ -4,25 +4,64 @@ import com.example.prj1be.domain.Board;
 import com.example.prj1be.domain.Member;
 import com.example.prj1be.mapper.BoardMapper;
 import com.example.prj1be.mapper.CommentMapper;
+import com.example.prj1be.mapper.FileMapper;
 import com.example.prj1be.mapper.LikeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class BoardService {
 
     private final BoardMapper mapper;
     private final CommentMapper commentMapper;
     private final LikeMapper likeMapper;
+    private final FileMapper fileMapper;
 
-    public boolean save(Board board, Member login) {
+    public boolean save(Board board, MultipartFile[] files, Member login) throws IOException {
         board.setWriter(login.getId());
-        return mapper.insert(board) == 1;
+        int cnt = mapper.insert(board);
+
+        // boardFile 테이블에 files 정보를 저장
+        if (files != null) {
+            for (int i = 0; i < files.length; i++) {
+                // id, boardId, name
+                fileMapper.insert(board.getId(), files[i].getOriginalFilename());
+
+                // 파일을 S3 bucket에 upload    // 실제 파일 저장
+                // 일단 local 에 저장
+                upload(board.getId(), files[i]);
+            }
+        }
+
+        return cnt == 1;
+    }
+
+    public void upload(Integer boardId, MultipartFile file) throws IOException {
+        // 파일 저장 경로
+        // C:\temp\prj1\게시물번호\fileName
+
+            File folder = new File("C:\\Temp\\prj1\\" + boardId);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
+            String path = folder.getAbsolutePath() + "\\" + file.getOriginalFilename();
+            File des = new File(path);
+            file.transferTo(des);
+
+
+
+
     }
 
     public boolean validate(Board board) {
