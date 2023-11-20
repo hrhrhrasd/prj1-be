@@ -15,17 +15,23 @@ public interface BoardMapper {
     int insert(Board board);
 
     @Select("""
-        SELECT board.id, title, board.writer, member.nickName, board.inserted,
-        count(distinct c.id) countComment, count(distinct l.id) countLike
-        FROM board join member
-        on board.writer = member.id
-        left join comment c on board.id = c.boardId
-        left join boardLike l on board.id = l.boardId
-        group by board.id
-        ORDER BY board.id DESC
+        SELECT b.id,
+               b.title,
+               b.writer,
+               m.nickName,
+               b.inserted,
+               COUNT(DISTINCT c.id) countComment,
+               COUNT(DISTINCT l.id) countLike
+        FROM board b JOIN member m ON b.writer = m.id
+                     LEFT JOIN comment c ON b.id = c.boardId
+                     LEFT JOIN boardLike l ON b.id = l.boardId
+        WHERE b.content LIKE #{keyword}
+           OR b.title LIKE #{keyword}
+        GROUP BY b.id
+        ORDER BY b.id DESC
         LIMIT #{from}, 10
         """)
-    List<Board> selectAll(Integer from);
+    List<Board> selectAll(Integer from, String keyword);
 
     @Select("""
         SELECT b.id, b.title, b.content, b.writer, m.nickName, b.inserted
@@ -63,8 +69,10 @@ public interface BoardMapper {
     List<Integer> selectIdListByMemberId(String id);
 
     @Select("""
-        select count(*) from board
-""")
-    int countAll();
+        SELECT COUNT(*) FROM board
+        WHERE title LIKE #{keyword}
+           OR content LIKE #{keyword}
+        """)
+    int countAll(String keyword);
 
 }
