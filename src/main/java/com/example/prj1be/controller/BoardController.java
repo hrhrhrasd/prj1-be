@@ -23,7 +23,7 @@ public class BoardController {
 
     @PostMapping("add")
     public ResponseEntity add(Board board,
-                              @RequestParam(value = "file[]", required = false) MultipartFile[] files,
+                              @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
                               @SessionAttribute(value = "login", required = false)
                               Member login) throws IOException {
 
