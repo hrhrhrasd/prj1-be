@@ -76,7 +76,9 @@ public class BoardController {
     }
 
     @PutMapping("edit")
-    public ResponseEntity edit(@RequestBody Board board,
+    public ResponseEntity edit(Board board,
+                               @RequestParam(value = "removeFileId[]",required = false) List<Integer> removeFileId,
+                               @RequestParam(value = "uploadFiles[]",required = false) MultipartFile uploadFiles,
                                @SessionAttribute(value = "login", required = false) Member login) {
 
         if (login == null) {
