@@ -21,6 +21,7 @@ public class Board {
     private Integer countLike;
     private Integer countFile;
 
+    private List<Integer> deleteFiles;
     private List<BoardFile> files;
 
     public String getAgo() {
