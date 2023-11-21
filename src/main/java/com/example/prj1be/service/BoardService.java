@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -142,7 +143,36 @@ public class BoardService {
         return mapper.deleteById(id) == 1;
     }
 
-    public boolean update(Board board) {
+    public boolean update(Board board, List<Integer> removeFileIds, MultipartFile[] uploadFiles) throws IOException {
+
+        // 파일 지우기
+        // s3에서 지우기
+        if (removeFileIds != null) {
+            for (Integer id : removeFileIds) {
+                BoardFile file = fileMapper.selectById(id);
+                String key = "prj1/" + id + "/" +file.getName();
+
+                DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                        .bucket(bucket)
+                        .key(key)
+                        .build();
+                s3.deleteObject(deleteObjectRequest);
+
+                // db에서 지우기
+                fileMapper.deleteById(id);
+            }
+        }
+
+        // 파일 추가하기
+        // s3에 올리기
+        if (uploadFiles != null) {
+            for (MultipartFile file : uploadFiles) {
+                upload(board.getId(), file);
+
+                // db에 추가하기
+                fileMapper.insert(board.getId(), file.getOriginalFilename());
+            }
+        }
         return mapper.update(board) == 1;
     }
 
