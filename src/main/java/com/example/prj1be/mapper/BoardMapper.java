@@ -16,6 +16,7 @@ public interface BoardMapper {
     int insert(Board board);
 
     @Select("""
+        <script>
         SELECT b.id,
                b.title,
                b.writer,
@@ -28,13 +29,20 @@ public interface BoardMapper {
                      LEFT JOIN comment c ON b.id = c.boardId
                      LEFT JOIN boardLike l ON b.id = l.boardId
                      LEFT JOIN boardFile f on b.id = f.boardId
-        WHERE b.content LIKE #{keyword}
-           OR b.title LIKE #{keyword}
+        WHERE <trim prefixOverrides="OR">
+                <if test="category == 'all' or category == 'title'">
+                OR b.title LIKE #{keyword}
+                </if>
+                <if test="category == 'all' or category == 'content'">
+                OR b.content LIKE #{keyword}
+                </if>
+            </trim>
         GROUP BY b.id
         ORDER BY b.id DESC
         LIMIT #{from}, 10
+        </script>
         """)
-    List<Board> selectAll(Integer from, String keyword);
+    List<Board> selectAll(Integer from, String keyword, String category);
 
     @Select("""
         SELECT b.id, b.title, b.content, b.writer, m.nickName, b.inserted
@@ -71,10 +79,19 @@ public interface BoardMapper {
     List<Integer> selectIdListByMemberId(String id);
 
     @Select("""
+        <script>
         SELECT COUNT(*) FROM board
-        WHERE title LIKE #{keyword}
-           OR content LIKE #{keyword}
+        WHERE
+            <trim prefixOverrides="OR">
+                <if test="category == 'all' or category == 'title'">
+                OR title LIKE #{keyword}
+                </if>
+                <if test="category == 'all' or category == 'content'">
+                OR content LIKE #{keyword}
+                </if>
+            </trim>
+        </script>
         """)
-    int countAll(String keyword);
+    int countAll(String keyword, String category);
 
 }
