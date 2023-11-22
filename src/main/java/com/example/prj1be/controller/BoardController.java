@@ -79,7 +79,7 @@ public class BoardController {
 
     @PutMapping("edit")
     public ResponseEntity edit(Board board,
-                               @RequestParam(value = "removeFileId[]",required = false) List<Integer> removeFileIds,
+                               @RequestParam(value = "removeFileIds[]",required = false) List<Integer> removeFileIds,
                                @RequestParam(value = "uploadFiles[]",required = false) MultipartFile[] uploadFiles,
                                @SessionAttribute(value = "login", required = false) Member login) throws IOException {
 
@@ -101,4 +101,13 @@ public class BoardController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+//    @GetMapping("/write")
+//    public String write(@SessionAttribute(value = "login", required = false) Member login) {
+//        if (login == null) {
+//            return "/login";
+//        }
+//
+//        return "/write";
+//    }
 }
