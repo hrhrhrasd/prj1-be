@@ -24,6 +24,6 @@ public class Board {
     private List<BoardFile> files;
 
     public String getAgo() {
-        return AppUtil.getAgo(inserted, LocalDateTime.now());
+        return AppUtil.getAgo(inserted);
     }
 }
